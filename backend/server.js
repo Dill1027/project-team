@@ -20,6 +20,10 @@ connection.once('open', () => {
   console.log("MongoDB connection established successfully");
 });
 
+// Authentication routes
+const authRouter = require('./routes/auth');
+app.use('/auth', authRouter);
+
 // Error handling for port in use
 const server = app.listen(port)
   .on('error', (err) => {
