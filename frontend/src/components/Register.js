@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import config from '../config';
 
 function Register() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ function Register() {
     }
 
     try {
-      const response = await axios.post('http://localhost:5001/auth/register', {
+      const response = await axios.post(`${config.apiUrl}/auth/register`, {
         name: formData.name,
         email: formData.email,
         password: formData.password

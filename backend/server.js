@@ -6,17 +6,16 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// More specific CORS configuration
+// Updated CORS configuration
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: true, // This allows all origins
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
+  maxAge: 86400
 }));
 
-// Add OPTIONS handling for preflight requests
+// Handle preflight requests
 app.options('*', cors());
 
 app.use(express.json());
