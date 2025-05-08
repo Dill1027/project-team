@@ -6,7 +6,19 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors());
+// More specific CORS configuration
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+}));
+
+// Add OPTIONS handling for preflight requests
+app.options('*', cors());
+
 app.use(express.json());
 
 // MongoDB connection
@@ -23,6 +35,21 @@ connection.once('open', () => {
 // Authentication routes
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
+
+// Proxy routes
+const proxyRouter = require('./routes/proxy');
+app.use('/proxy', proxyRouter);
+
+// Add error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something broke!' });
+});
+
+// Add 404 handling
+app.use((req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
 
 // Error handling for port in use
 const server = app.listen(port)
