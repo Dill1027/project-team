@@ -12,7 +12,7 @@ function Login() {
         credential: credentialResponse.credential
       });
       localStorage.setItem('token', response.data.token);
-      navigate('/');
+      navigate('/home');
     } catch (error) {
       console.error('Login failed:', error);
     }
